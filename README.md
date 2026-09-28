@@ -11,31 +11,41 @@ do Amanhã (PDA)**.
 > medições.** Não existem dados oficiais públicos de energia por token para
 > os modelos Claude. Veja a seção [Premissas e fontes](#premissas-e-fontes).
 
-## Instalação
+## Rodando na sua máquina (para quem clonou o repositório)
+
+Requisitos: Node.js 20+ (LTS) e Claude Code instalado.
 
 ```bash
+git clone https://github.com/Samuel-Kepler/llm-eco-footprint-mcp.git
+cd llm-eco-footprint-mcp
 npm install
 npm run build
 ```
 
-Requisitos: Node.js 20+ (LTS).
-
-## Registrando no Claude Code
-
-```bash
-npm run build
-claude mcp add eco-footprint -- node /caminho/absoluto/llm-eco-footprint-mcp/dist/index.js
-```
-
-Para compartilhar com a turma via repositório (gera um `.mcp.json` na raiz
-do projeto):
+O repositório já vem com um `.mcp.json` na raiz (caminho relativo,
+`./dist/index.js`), então basta abrir o Claude Code **dentro dessa pasta**:
 
 ```bash
-claude mcp add --scope project eco-footprint -- node ./dist/index.js
+claude
 ```
 
-Para verificar se o servidor está registrado: `claude mcp list` ou `/mcp`
-dentro do Claude Code.
+Na primeira vez, o Claude Code vai perguntar se você aprova o servidor MCP
+`eco-footprint` do projeto — aprove. Depois, confira com `claude mcp list`
+ou `/mcp` dentro da sessão.
+
+> Se você mover ou renomear a pasta do projeto depois de já ter aprovado o
+> servidor, rode `npm run build` de novo antes de abrir o Claude Code — o
+> caminho no `.mcp.json` é relativo à raiz do projeto, então funciona em
+> qualquer máquina sem edição.
+
+## Registrando manualmente em outro projeto
+
+Se você quiser usar o servidor a partir de **outro** diretório (não este
+repositório), registre com o caminho absoluto do seu clone:
+
+```bash
+claude mcp add eco-footprint -- node /caminho/absoluto/para/llm-eco-footprint-mcp/dist/index.js
+```
 
 **Alternativa (Claude Desktop):** adicione o mesmo comando em
 `claude_desktop_config.json`, na chave `"mcpServers"`.

@@ -4,7 +4,7 @@
       "type": "stdio",
       "command": "node",
       "args": [
-        "C:\\Users\\plugify\\Downloads\\mcpPDA\\dist\\index.js"
+        "./dist/index.js"
       ],
       "env": {}
     }
