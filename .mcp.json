@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "eco-footprint": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "C:\\Users\\plugify\\Downloads\\mcpPDA\\dist\\index.js"
+      ],
+      "env": {}
+    }
+  }
+}
