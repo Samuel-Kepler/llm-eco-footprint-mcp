@@ -33,6 +33,16 @@ describe("validacao de entradas hostis", () => {
     expect(AnalyzeSessionInputSchema.safeParse({ project_path: "A".repeat(1025) }).success).toBe(false);
   });
 
+  it("erro de enum nao devolve o valor enviado pelo chamador", () => {
+    const region = AnalyzeSessionInputSchema.safeParse({ region: INJECTION });
+    const cooling = CalculateFootprintInputSchema.safeParse({ input_tokens: 1, output_tokens: 1, cooling_system: INJECTION });
+    for (const result of [region, cooling]) {
+      expect(result.success).toBe(false);
+      // So a message chega ao assistente (o campo "received" do issue nao e enviado).
+      if (!result.success) expect(result.error.issues.map((i) => i.message).join(" ")).not.toContain("IGNORE");
+    }
+  });
+
   it("region, cooling_system e since invalidos sao rejeitados", () => {
     expect(AnalyzeSessionInputSchema.safeParse({ region: "marte" }).success).toBe(false);
     expect(AnalyzeSessionInputSchema.safeParse({ cooling_system: INJECTION }).success).toBe(false);

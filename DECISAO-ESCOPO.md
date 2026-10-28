@@ -37,8 +37,8 @@ soma os tokens reais por modelo e devolve uma **faixa de estimativa**
 | 5 | Ler um arquivo escolhido pelo chamador | `project_path` é convertido por `encodeProjectPath` em um nome de pasta com traços (`:51`), não usado como caminho. `session_id` passa por `path.basename` (`:94`) e só vale se estiver na lista de `.jsonl` que `readdir` encontrou (`:97`) | Mesmo teste de traversal |
 | 6 | Ler arquivos que não sejam `.jsonl` | `listSessionFiles` filtra por extensão (`:78`) | Leitura do código |
 | 7 | Devolver o conteúdo de mensagens, código ou prompts do usuário | O tipo `RawLogLine` (`:124`) só declara `usage` e `model`; o acumulador só soma esses campos | Leitura do código. **Sem teste que prove**: a fixture só tem `"content":"ola"` numa linha de usuário e nenhum teste confere que texto de mensagem não aparece na saída (lacuna 4) |
-| 8 | Aceitar `region` ou `cooling_system` arbitrários | Enums Zod em `src/types/index.ts:7` e `:15` | Leitura do código. `tests/types.test.ts` só testa o valor padrão, não a rejeição de valores inválidos |
-| 9 | Aceitar `since` que não seja data | `z.string().datetime().or(z.string().date())` em `src/types/index.ts:65` | Leitura do código. Nenhum teste cobre `since` inválido |
+| 8 | Aceitar `region` ou `cooling_system` arbitrários | Enums Zod em `src/types/index.ts:7` e `:15` | `tests/types.test.ts` (rejeição de valores inválidos e mensagem de erro sem eco do valor enviado) |
+| 9 | Aceitar `since` que não seja data | `z.string().datetime().or(z.string().date())` em `src/types/index.ts:65` | `tests/types.test.ts` (`since` inválido rejeitado, data válida aceita) |
 | 10 | Ser alterada ou ampliada pelo próprio assistente | Todas as travas estão no código TypeScript, não em instruções ao modelo. O assistente só escolhe valores dentro dos parâmetros acima | Leitura do código |
 
 ## 5. Lacunas conhecidas
