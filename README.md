@@ -7,6 +7,18 @@ ferramenta dedicada a medir o consumo **real** de uma sessão do Claude Code.
 Projeto desenvolvido como atividade do curso **IA para Devs — Programadores
 do Amanhã (PDA)**.
 
+## Que problema este projeto resolve
+
+Cada vez que alguém conversa com uma inteligência artificial, os computadores
+que respondem gastam energia e água para funcionar e para se manter frios, e
+quase ninguém sabe quanto. Este projeto cria uma ferramenta que olha o uso
+real de quem programa com o Claude Code e mostra, em linguagem simples, quanta
+água, energia e emissão de carbono aquele trabalho provavelmente custou, com
+comparações do dia a dia, como garrafas de água. Isso importa porque ninguém
+reduz o que não consegue enxergar, e ajuda a PDA e seus alunos a usar IA com
+mais consciência. Os números são estimativas honestas, não medições exatas, e a
+ferramenta sempre avisa isso.
+
 > ⚠️ **Os valores são sempre faixas de estimativa (mín/central/máx), nunca
 > medições.** Não existem dados oficiais públicos de energia por token para
 > os modelos Claude. Veja a seção [Premissas e fontes](#premissas-e-fontes).
