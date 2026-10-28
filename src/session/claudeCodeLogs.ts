@@ -1,6 +1,7 @@
 import { readFile, readdir, stat } from "node:fs/promises";
 import { homedir } from "node:os";
 import path from "node:path";
+import { isSafeModelName } from "../types/index.js";
 
 /**
  * Leitor dos logs locais (.jsonl) do Claude Code.
@@ -190,7 +191,11 @@ export async function readClaudeCodeSessionUsage(options: {
         seenMessageIds.add(messageId);
       }
 
-      const model = record.message.model ?? "desconhecido";
+      // O nome do modelo vem do log e e devolvido na saida: so passa se for
+      // um id plausivel (allow-list), senao vira "desconhecido".
+      const rawModel = record.message.model;
+      const model =
+        typeof rawModel === "string" && isSafeModelName(rawModel) ? rawModel : "desconhecido";
       const usage = record.message.usage;
 
       if (!entriesByModel[model]) entriesByModel[model] = emptyUsage(model);

@@ -111,7 +111,11 @@ export function registerAnalyzeSessionTool(server: McpServer): void {
           since: args.since,
         });
       } catch (error) {
-        const message = error instanceof ClaudeCodeLogsError ? error.message : String(error);
+        // Erros inesperados podem conter caminhos do sistema: o detalhe vai
+        // para stderr e o assistente recebe so uma mensagem generica.
+        console.error("analyze_claude_code_session: erro inesperado", error);
+        const message =
+          error instanceof ClaudeCodeLogsError ? error.message : "falha inesperada ao ler os logs.";
         return {
           isError: true,
           content: [{ type: "text" as const, text: `Erro ao ler logs do Claude Code: ${message}` }],

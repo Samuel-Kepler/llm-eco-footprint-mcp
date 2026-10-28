@@ -4,6 +4,23 @@ import type { FormattedEquivalences } from "../math/format.js";
 // Limite superior de tokens aceito por chamada (soma de todos os campos de tokens)
 export const MAX_TOTAL_TOKENS = 1e12;
 
+// Nome de modelo: allow-list de caracteres (sem espacos nem pontuacao de
+// frase) e tamanho maximo. Ids reais (ex.: "claude-sonnet-5-5",
+// "us.anthropic.claude-opus-4-1:0", "claude-opus-4[1m]") passam; uma frase
+// com instrucao embutida nao. O nome e devolvido na saida das tools, entao
+// texto livre aqui chegaria de volta ao assistente (injecao indireta).
+export const MODEL_NAME_MAX_LENGTH = 64;
+const MODEL_NAME_PATTERN = /^[A-Za-z0-9._:/[\]-]+$/;
+
+export function isSafeModelName(name: string): boolean {
+  return name.length <= MODEL_NAME_MAX_LENGTH && MODEL_NAME_PATTERN.test(name);
+}
+
+export const ModelNameSchema = z
+  .string()
+  .max(MODEL_NAME_MAX_LENGTH)
+  .regex(MODEL_NAME_PATTERN, "model so aceita letras, numeros e . _ : / [ ] -");
+
 export const CoolingSystemEnum = z.enum([
   "evaporative",
   "hybrid",
@@ -38,7 +55,7 @@ export const calculateFootprintInputShape = {
   output_tokens: z.number().int().min(0),
   cache_read_tokens: z.number().int().min(0).optional().default(0),
   cache_write_tokens: z.number().int().min(0).optional().default(0),
-  model: z.string().optional(),
+  model: ModelNameSchema.optional(),
   cooling_system: CoolingSystemEnum.optional().default("evaporative"),
   region: RegionEnum.optional().default("global"),
   include_offsite_water: z.boolean().optional().default(true),
@@ -53,15 +70,19 @@ export type CalculateFootprintInput = z.infer<
 export const compareCoolingInputShape = {
   input_tokens: z.number().int().min(0),
   output_tokens: z.number().int().min(0),
-  model: z.string().optional(),
+  model: ModelNameSchema.optional(),
   region: RegionEnum.optional().default("global"),
 };
 export const CompareCoolingInputSchema = z.object(compareCoolingInputShape);
 export type CompareCoolingInput = z.infer<typeof CompareCoolingInputSchema>;
 
 export const analyzeSessionInputShape = {
-  project_path: z.string().optional(),
-  session_id: z.string().optional(),
+  project_path: z.string().min(1).max(1024).optional(),
+  // Ids de sessao sao UUIDs (com ".jsonl" opcional): letras, numeros, . _ -
+  session_id: z
+    .string()
+    .regex(/^[A-Za-z0-9._-]{1,128}$/, "session_id so aceita letras, numeros e . _ -")
+    .optional(),
   since: z.string().datetime().optional().or(z.string().date().optional()),
   cooling_system: CoolingSystemEnum.optional().default("evaporative"),
   region: RegionEnum.optional().default("global"),
