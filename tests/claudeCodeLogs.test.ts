@@ -74,4 +74,30 @@ describe("readClaudeCodeSessionUsage", () => {
 
     expect(result.sessions_read).toEqual([]);
   });
+
+  it("project_path hostil vira nome de pasta e nao le fora de projects/", async () => {
+    for (const hostile of ["../../../../etc", "C:/Windows/System32", ""]) {
+      const result = await readClaudeCodeSessionUsage({ projectPath: hostile });
+      expect(result.sessions_read).toEqual([]);
+    }
+  });
+
+  it("nome de modelo do log com instrucao embutida vira 'desconhecido' e o texto das mensagens nao vaza", async () => {
+    const encoded = encodeProjectPath(FAKE_PROJECT_PATH);
+    await copyFile(
+      path.join(process.cwd(), "tests", "fixtures", "session-poisoned-model.jsonl"),
+      path.join(configDir, "projects", encoded, "poisoned.jsonl"),
+    );
+
+    const result = await readClaudeCodeSessionUsage({
+      projectPath: FAKE_PROJECT_PATH,
+      sessionId: "poisoned",
+    });
+
+    expect(Object.keys(result.entries_by_model).sort()).toEqual(["claude-sonnet-5-5", "desconhecido"]);
+    const serialized = JSON.stringify(result);
+    expect(serialized).not.toContain("IGNORE");
+    expect(serialized).not.toContain("PWNED");
+    expect(serialized).not.toContain("SEGREDO-DO-USUARIO-123");
+  });
 });
