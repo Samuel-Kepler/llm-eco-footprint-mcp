@@ -15,6 +15,12 @@ adaptativa e vírgula decimal (ex.: "10,3 Wh").
 - Use os números crus apenas para contas auxiliares (ex.: participação do cache
   nos tokens equivalentes). Ao mostrar o resultado de uma conta sua, deixe a
   conta visível e confira a unidade.
+- Toda conta própria precisa aparecer inteira, com os fatores e as unidades:
+  `25.741 tokens eq. ÷ 1000 × 0,0006 kWh = 0,0154 kWh`. Nunca escreva um
+  número derivado sem a conta, e nunca afirme que um valor "bate com" outro da
+  ferramenta sem mostrar a conta que o confirma. Se a conta não fechar com o
+  valor retornado, diga que não fechou, em vez de ajustar o número para parecer
+  coerente.
 - Unidades válidas de energia: Wh e kWh. Nunca use mWh.
 - Se o campo `formatado` estiver ausente, o servidor provavelmente está
   desatualizado. Avise o usuário para recarregar o eco-footprint via `/mcp`
