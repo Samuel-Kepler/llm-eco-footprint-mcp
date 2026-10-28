@@ -21,15 +21,18 @@ export const ModelNameSchema = z
   .max(MODEL_NAME_MAX_LENGTH)
   .regex(MODEL_NAME_PATTERN, "model so aceita letras, numeros e . _ : / [ ] -");
 
-export const CoolingSystemEnum = z.enum([
-  "evaporative",
-  "hybrid",
-  "closed_loop",
-  "direct_to_chip",
-]);
+// Mensagem de erro fixa para enums: o padrao do Zod inclui "received '<valor>'",
+// o que devolveria ao assistente o texto que o chamador enviou.
+const enumErrorMap = (field: string, options: readonly string[]) => ({
+  errorMap: () => ({ message: `${field} invalido; use um de: ${options.join(", ")}` }),
+});
+
+const COOLING_SYSTEMS = ["evaporative", "hybrid", "closed_loop", "direct_to_chip"] as const;
+export const CoolingSystemEnum = z.enum(COOLING_SYSTEMS, enumErrorMap("cooling_system", COOLING_SYSTEMS));
 export type CoolingSystem = z.infer<typeof CoolingSystemEnum>;
 
-export const RegionEnum = z.enum(["global", "us", "eu", "brazil"]);
+const REGIONS = ["global", "us", "eu", "brazil"] as const;
+export const RegionEnum = z.enum(REGIONS, enumErrorMap("region", REGIONS));
 export type Region = z.infer<typeof RegionEnum>;
 
 export const ModelFamilyEnum = z.enum(["large", "medium", "small"]);
