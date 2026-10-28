@@ -42,3 +42,8 @@ Claude Code, senão ele usa o `dist/` antigo.
   de log novos entram como fixture `.jsonl` em `tests/fixtures/`.
 - Código e comentários sem acentos (padrão dos `.ts`); README e docs em
   português com acentos.
+
+---
+
+Este conteúdo também está em `AGENTS.md` (formato aberto, lido por outros
+agentes como Cursor e Codex). Ao mudar uma regra aqui, atualize os dois arquivos.
